@@ -5,7 +5,7 @@ class TicTacToe:
 
     def __init__(self, gui : ctk.CTk):
         self.__gui = gui
-        self.__cpt=0
+        self.__tour=0
         self.__joueur1Score=[ [0,0,0], [0,0,0], [0,0,0] ]
         self.__joueur2Score=[ [0,0,0], [0,0,0], [0,0,0] ]
         self.__scorePlayer1=0
@@ -62,14 +62,14 @@ class TicTacToe:
 
 
     def __showImage(self, a, b):
-        global __cpt, __joueur1Score, __joueur2Score
+        global __tour, __joueur1Score, __joueur2Score
         if self.__joueur1Score[a][b]!=1 and self.__joueur2Score[a][b]!=1:
-            print(f"self.__cpt ({'joueur 1' if self.__cpt%2 ==0 else 'joueur 2'}) = {self.__cpt}")
+            print(f"self.__tour ({'joueur 1' if self.__tour%2 ==0 else 'joueur 2'}) = {self.__tour}")
 
-            image_name = "rond" if self.__cpt % 2 == 0 else "croix"
-            joueur = self.__joueur1Score if self.__cpt % 2 == 0 else self.__joueur2Score
+            image_name = "rond" if self.__tour % 2 == 0 else "croix"
+            joueur = self.__joueur1Score if self.__tour % 2 == 0 else self.__joueur2Score
 
-            # print(f"self.__cpt = {self.__cpt}")
+            # print(f"self.__tour = {self.__tour}")
             Img1=ctk.CTkImage(Image.open(f"Images/{image_name}.png"),size=(80,80))
             label_img1=ctk.CTkLabel(self.__game_buttons[a][b],image=Img1,text="")
             label_img1.place(x=8,y=12)
@@ -78,17 +78,17 @@ class TicTacToe:
 
                 
             self.__verif_gagnant()
-            self.__cpt=self.__cpt+1
+            self.__tour=self.__tour+1
 
     def __matchNul(self):
-        global __list_images, __joueur1Score, __joueur2Score, __cpt
+        global __list_images, __joueur1Score, __joueur2Score, __tour
         self.__gestion_bouttons(state = 'readonly')
         for image in self.__list_images:
             image.destroy()
         self.__list_images = []
         self.__joueur1Score=[[0,0,0], [0,0,0], [0,0,0]]
         self.__joueur2Score=[[0,0,0], [0,0,0], [0,0,0]]
-        self.__cpt = 0
+        self.__tour = 0
 
     def __nextLevel(self):
         """permet de passer au niveau supérieur"""
@@ -107,8 +107,8 @@ class TicTacToe:
         """permet de vérifier lequel des joueurs à gagner la partie"""
         global __scorePlayer1, __scorePlayer2, __matchNul
 
-        print(f"Valeur de self.__cpt = {self.__cpt}")
-        if(self.__cpt%2==0):
+        print(f"Valeur de self.__tour = {self.__tour}")
+        if(self.__tour%2==0):
             if self.check_rows_and_spans(self.__joueur1Score) or self.__check_diagonals(self.__joueur1Score):
                 self.__scorePlayer1=self.__scorePlayer1+1
                 self.__libelle_Score1.configure(text=f"Score: {self.__scorePlayer1}")
@@ -117,7 +117,7 @@ class TicTacToe:
                 self.__gestion_bouttons()
                 self.__gui.after(1000, lambda: self.__nextLevel())
 
-            if self.__cpt == 8: 
+            if self.__tour == 8: 
                 self.__gui.after(1000, lambda: self.__matchNul())
 
         else:
